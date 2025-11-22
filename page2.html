@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сторінка 2 (Клієнт)</title>
+    <link rel="stylesheet" href="ws6.css" />
+  </head>
+  <body>
+    <div id="header">
+      <p>
+        Мова програмування — це система позначень для опису алгоритмів і
+        структур даних,<br />
+        певна штучна формальна система, засобами якої можна виражати
+        алгоритми.<br />
+        Мову програмування визначає набір лексичних, синтаксичних і семантичних
+        правил,<br />
+        що задають зовнішній вигляд програми та дії, які виконує виконавець
+        (комп'ютер) під її управлінням.
+      </p>
+      <h2 id="x">
+        Хороший програміст — це той, хто дивиться в обидва боки, переходячи
+        дорогу з одностороннім рухом.
+      </h2>
+    </div>
+
+    <div id="left">
+      <div id="leftcol1">
+        <p>Елементи:</p>
+        <ul>
+          <li>Синтаксис</li>
+          <li>Семантика</li>
+          <li>Типи даних</li>
+        </ul>
+      </div>
+      <div id="leftcol2">
+        <p>
+          Мова програмування — це нотація для запису програм, які є
+          специфікаціями якогось обчислення або алгоритму.
+        </p>
+      </div>
+    </div>
+
+    <div id="center-wrapper">
+      <div id="center">
+        <p>
+          З часу створення перших програмованих машин було створено понад дві з
+          половиною тисячі мов програмування. Щороку до них додаються нові.
+          Деякими мовами вміє користуватись тільки невелике число їхніх
+          розробників, інші стають відомі мільйонам людей. Професійні
+          програмісти зазвичай застосовують у своїй роботі декілька мов
+          програмування.
+        </p>
+      </div>
+
+      <div id="accordion">
+        <h3>Динамічний Акордеон</h3>
+        <div id="accordionContainer">Завантаження...</div>
+        <p style="font-size: 12px; color: gray; margin-top: 20px">
+          *Оновлюється кожні 5 секунд
+        </p>
+      </div>
+    </div>
+
+    <div id="right">
+      <ul id="menu">
+        <li><a href="page2.html">Головна</a></li>
+      </ul>
+    </div>
+
+    <div id="footer">
+      <h2 id="y">
+        Найбільша проблема з програмістами в тому, що ти ніколи не зможеш
+        зрозуміти, чим він займається, доки не буде занадто пізно.
+      </h2>
+      <p>Сайт створено з навчальною метою, його вміст є не повним.</p>
+    </div>
+
+    <script>
+      let currentHash = ""; // Для перевірки змін
+
+      // Функція завантаження даних (AJAX GET)
+      function loadData() {
+        fetch("get_data.php")
+          .then((response) => response.json())
+          .then((responseObj) => {
+            // Перевіряємо, чи змінився хеш даних (чи є нові дані)
+            if (responseObj.hash !== currentHash) {
+              currentHash = responseObj.hash;
+              renderAccordion(responseObj.data);
+              console.log("Акордеон оновлено!");
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // Функція відмальовки (DOM Manipulation)
+      function renderAccordion(data) {
+        const container = document.getElementById("accordionContainer");
+        container.innerHTML = ""; // Очищаємо
+
+        if (data.length === 0) {
+          container.innerHTML = "<p>Елементів немає.</p>";
+          return;
+        }
+
+        data.forEach((item, index) => {
+          // Створення елемента item
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "accordion-item";
+
+          // Створення заголовка
+          const headerDiv = document.createElement("div");
+          headerDiv.className = "accordion-header";
+          headerDiv.innerHTML = `<span>${item.title}</span> <span>▼</span>`;
+
+          // Створення контенту
+          const contentDiv = document.createElement("div");
+          contentDiv.className = "accordion-content";
+          contentDiv.innerHTML = `<p>${item.content}</p>`;
+
+          // Логіка відкриття/закриття (Без Bootstrap!)
+          headerDiv.onclick = function () {
+            // Закрити всі інші (опціонально, для класичного акордеону)
+            document.querySelectorAll(".accordion-content").forEach((el) => {
+              if (el !== contentDiv) {
+                el.classList.remove("show");
+                el.previousElementSibling.classList.remove("active");
+              }
+            });
+
+            // Перемикання поточного
+            this.classList.toggle("active");
+            contentDiv.classList.toggle("show");
+          };
+
+          itemDiv.appendChild(headerDiv);
+          itemDiv.appendChild(contentDiv);
+          container.appendChild(itemDiv);
+        });
+      }
+
+      // Запускаємо одразу
+      loadData();
+
+      // Періодичне опитування сервера (кожні 5 секунд)
+      setInterval(loadData, 5000);
+    </script>
+  </body>
+</html>
