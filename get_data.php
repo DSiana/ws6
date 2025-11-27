@@ -6,7 +6,6 @@ $file = 'data.json';
 
 if (file_exists($file)) {
     $content = file_get_contents($file);
-    // Додаємо хеш файлу, щоб фронтенд знав, чи змінилися дані
     $hash = md5($content); 
     
     echo json_encode([
@@ -16,4 +15,5 @@ if (file_exists($file)) {
 } else {
     echo json_encode(["hash" => "", "data" => []]);
 }
+
 ?>
