@@ -79,7 +79,6 @@
     </div>
 
     <script>
-      // Функція додавання поля введення
       function addItem() {
         const container = document.getElementById("formContainer");
         const div = document.createElement("div");
@@ -94,7 +93,6 @@
         container.appendChild(div);
       }
 
-      // Функція збереження (AJAX POST)
       function saveData() {
         const titles = document.querySelectorAll(".acc-title");
         const contents = document.querySelectorAll(".acc-content");
@@ -119,8 +117,8 @@
           .catch((error) => console.error("Error:", error));
       }
 
-      // Додаємо один елемент при завантаженні
       addItem();
     </script>
   </body>
 </html>
+
