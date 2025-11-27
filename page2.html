@@ -77,14 +77,12 @@
     </div>
 
     <script>
-      let currentHash = ""; // Для перевірки змін
+      let currentHash = ""; 
 
-      // Функція завантаження даних (AJAX GET)
       function loadData() {
         fetch("get_data.php")
           .then((response) => response.json())
           .then((responseObj) => {
-            // Перевіряємо, чи змінився хеш даних (чи є нові дані)
             if (responseObj.hash !== currentHash) {
               currentHash = responseObj.hash;
               renderAccordion(responseObj.data);
@@ -94,10 +92,9 @@
           .catch((error) => console.error("Error:", error));
       }
 
-      // Функція відмальовки (DOM Manipulation)
       function renderAccordion(data) {
         const container = document.getElementById("accordionContainer");
-        container.innerHTML = ""; // Очищаємо
+        container.innerHTML = ""; 
 
         if (data.length === 0) {
           container.innerHTML = "<p>Елементів немає.</p>";
@@ -105,23 +102,19 @@
         }
 
         data.forEach((item, index) => {
-          // Створення елемента item
+          
           const itemDiv = document.createElement("div");
           itemDiv.className = "accordion-item";
 
-          // Створення заголовка
           const headerDiv = document.createElement("div");
           headerDiv.className = "accordion-header";
           headerDiv.innerHTML = `<span>${item.title}</span> <span>▼</span>`;
 
-          // Створення контенту
           const contentDiv = document.createElement("div");
           contentDiv.className = "accordion-content";
           contentDiv.innerHTML = `<p>${item.content}</p>`;
 
-          // Логіка відкриття/закриття (Без Bootstrap!)
           headerDiv.onclick = function () {
-            // Закрити всі інші (опціонально, для класичного акордеону)
             document.querySelectorAll(".accordion-content").forEach((el) => {
               if (el !== contentDiv) {
                 el.classList.remove("show");
@@ -129,7 +122,6 @@
               }
             });
 
-            // Перемикання поточного
             this.classList.toggle("active");
             contentDiv.classList.toggle("show");
           };
@@ -140,11 +132,10 @@
         });
       }
 
-      // Запускаємо одразу
       loadData();
 
-      // Періодичне опитування сервера (кожні 5 секунд)
       setInterval(loadData, 5000);
     </script>
   </body>
 </html>
+
