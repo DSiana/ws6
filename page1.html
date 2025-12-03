@@ -79,10 +79,11 @@
     </div>
 
     <script>
-      function addItem() {
+      function addItem(titleText = "", contentText = "") {
         const container = document.getElementById("formContainer");
         const div = document.createElement("div");
         div.className = "form-group";
+        
         div.innerHTML = `
                 <label>Заголовок:</label>
                 <input type="text" class="acc-title" placeholder="Назва вкладки">
@@ -90,7 +91,32 @@
                 <textarea class="acc-content" rows="3" placeholder="Текст всередині"></textarea>
                 <button class="remove-btn" onclick="this.parentElement.remove()">Видалити</button>
             `;
+        
+        div.querySelector(".acc-title").value = titleText;
+        div.querySelector(".acc-content").value = contentText;
+
         container.appendChild(div);
+      }
+
+      function loadAdminData() {
+        fetch("get_data.php")
+            .then(response => response.json())
+            .then(responseObj => {
+                const container = document.getElementById("formContainer");
+                container.innerHTML = ""; 
+
+                if (responseObj.data && responseObj.data.length > 0) {
+                    responseObj.data.forEach(item => {
+                        addItem(item.title, item.content);
+                    });
+                } else {
+                    addItem();
+                }
+            })
+            .catch(error => {
+                console.error("Помилка завантаження:", error);
+                addItem(); 
+            });
       }
 
       function saveData() {
@@ -99,7 +125,7 @@
         const data = [];
 
         titles.forEach((title, index) => {
-          if (title.value.trim() !== "") {
+          if (title.value.trim() !== "" || contents[index].value.trim() !== "") {
             data.push({
               title: title.value,
               content: contents[index].value,
@@ -117,8 +143,9 @@
           .catch((error) => console.error("Error:", error));
       }
 
-      addItem();
+      loadAdminData();
     </script>
   </body>
 </html>
+
 
